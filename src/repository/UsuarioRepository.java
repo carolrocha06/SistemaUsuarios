@@ -1,21 +1,22 @@
 // Responsável por interagir com o banco de dados
 package repository;
 
-import models.Usuario;
-import config.DbConnection;
+import models.Usuario; // importa o modelo usuario
+import config.DbConnection; // importa a classe de conexao com o banco de dados
 
-import java.sql.*;
+import java.sql.*; // importa tudo para manipulação de sql
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioRepository {
-    // Criar um novo usuario
+
+    // método para criar um novo usuario
     public void adicionarUsuario(Usuario usuario) {
         String sql = "INSERT INTO usuarios (nome, nick, senha, tipo, status, genero) VALUES (?, ?, ?, ?, ?, ?)";
 
-        System.out.println(usuario.getSenha());
-        try (Connection conn = DbConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
+        System.out.println(usuario.getSenha()); // exibe a senha do usuário no console (usa para debug)
+        try (Connection conn = DbConnection.getConnection(); // obtém a conexão
+                PreparedStatement stmt = conn.prepareStatement(sql)) { // prepara a query
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getNick());
             stmt.setString(3, usuario.getSenha());
@@ -23,25 +24,25 @@ public class UsuarioRepository {
             stmt.setString(5, usuario.getStatus());
             stmt.setString(6, usuario.getGenero());
 
-            int linhasAfetadas = stmt.executeUpdate();
+            int linhasAfetadas = stmt.executeUpdate(); // executa a query e verifica quantas linhas foram afetadas
             if (linhasAfetadas > 0) {
                 System.out.println("Usuário adicionado com sucesso!");
             }
 
         } catch (SQLException e) {
             System.out.println("Erro ao adicionar usuário.");
-            e.printStackTrace();
+            e.printStackTrace();  // exibe o rastreamento da exceção
         }
     }
 
-    // Obter todos os usuarios
+    // método para obter todos os usuarios do banco de dados
     public List<Usuario> obterTodosUsuarios() {
-        List<Usuario> usuarios = new ArrayList<>();
+        List<Usuario> usuarios = new ArrayList<>(); // cria uma lista para armazenar os usuários
         String sql = "SELECT * FROM usuarios";
 
         try (Connection conn = DbConnection.getConnection();
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();  // cria um statement simples
+                ResultSet rs = stmt.executeQuery(sql)) { // executa a consulta e obtém os resultados
 
             while (rs.next()) {
                 Usuario usuario = new Usuario(
@@ -52,7 +53,7 @@ public class UsuarioRepository {
                     rs.getString("status"),
                     rs.getString("genero")
                     );
-                usuarios.add(usuario);
+                usuarios.add(usuario);  // adiciona o usuário à lista
             }
 
         } catch (SQLException e) {
@@ -60,10 +61,10 @@ public class UsuarioRepository {
             e.printStackTrace();
         }
 
-        return usuarios;
+        return usuarios; // retorna a lista de usuários
     }
 
-    // Obter usuario por nick
+    // método para obter usuario por nick
     public Usuario obterUsuarioPorNick(String nick) {
         String sql = "SELECT * FROM usuarios WHERE nick = ?";
         Usuario usuario = null;
@@ -72,9 +73,9 @@ public class UsuarioRepository {
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, nick); // Parâmetro da interrogação
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery(); // executa a query
 
-            if (rs.next()) {
+            if (rs.next()) { // verifica se existe um resultado
                 usuario = new Usuario(
                     rs.getString("nome"),
                     rs.getString("nick"),
@@ -88,10 +89,10 @@ public class UsuarioRepository {
             e.printStackTrace();
         }
 
-        return usuario;
+        return usuario; // retorna 
     }
 
-    // Atualizar um usuario
+    // método para atualizar um usuario
     public void atualizarUsuario(Usuario usuario) {
         String sql = "UPDATE usuarios SET nome = ?, senha = ?, tipo = ?, status = ?, genero = ? WHERE nick = ?";
 
@@ -117,16 +118,16 @@ public class UsuarioRepository {
         }
     }
 
-    // Deletar um usuário
+    // método para deletar um usuário
     public void deletarUsuario(String nick) {
-        String sql = "DELETE FROM usuarios WHERE nick = ?";
+        String sql = "DELETE FROM usuarios WHERE nick = ?"; // o parametro que será usado
 
         try (Connection conn = DbConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, nick);
+            stmt.setString(1, nick); // define o nick a ser deletado
 
-            int linhasAfetadas = stmt.executeUpdate();
+            int linhasAfetadas = stmt.executeUpdate(); // executa a deleção ao atualizar
             if (linhasAfetadas > 0) {
                 System.out.println("Usuário deletado com sucesso!");
             } else {

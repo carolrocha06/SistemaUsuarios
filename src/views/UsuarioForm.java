@@ -8,7 +8,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-public class UsuarioForm extends JDialog { // ao invés de JFrame
+public class UsuarioForm extends JDialog { // ao invés de JFrame, extende JDialog para criar uma janela modal
+    // declarando tudo que será usado:
     private JButton salvarButton, cancelarButton;
     private JComboBox<String> comboBox; // Especificando o tipo de dado entre <>
     private JPanel panelButton, panel0, panel1, panel2, panel4;
@@ -19,26 +20,29 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame
     private JRadioButton radio1, radio2;
     private ButtonGroup radioGroup;
 
-    private Usuario usuario;
-    private boolean isEditMode;
+    private Usuario usuario; // objeto de usuário que será manipulado
+    private boolean isEditMode;  // define se o formulário está em modo de edição
 
+    // construtor para modo de criação de usuário
     public UsuarioForm(Frame parent, String title) {
-        super(parent, title, true);
+        super(parent, title, true); // janela modal
         this.isEditMode = false;
         initializeComponents();
         setResizable(false); // impede que o usuário ajuste o tamanho da janela
     }
 
+    // construtor para modo de edição de usuário
     public UsuarioForm(Frame parent, String title, Usuario usuario) {
-        super(parent, title, true);
+        super(parent, title, true); // janela modal
         this.usuario = usuario;
-        this.isEditMode = true;
-        initializeComponents();
+        this.isEditMode = true; // define que é modo de edição
+        initializeComponents();  // inicializa os componentes da interface
         preencherCampos();
         setResizable(false); // impede que o usuário ajuste o tamanho da janela
     }
 
     private void initializeComponents() {
+        // inicializa os labels e campos de texto
         labelNome = new JLabel(" Nome Completo: ");
         tFNome = new JTextField(20);
         labelNick = new JLabel(" Nickname: ");
@@ -46,14 +50,17 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame
         labelSenha = new JLabel(" Senha: ");
         pFSenha = new JPasswordField(20);
 
+        // ComboBox para selecionar o tipo de usuário
         labelTipo = new JLabel(" Tipo: ");
         comboBox = new JComboBox<>(); // criação do JComboBox
         comboBox.addItem(" Comum"); // adiciona o texto
         comboBox.addItem(" Administrador"); // adiciona o texto
 
+        // Checkbox para o status do usuário
         labelStatus = new JLabel(" Status: ");
         checkBox = new JCheckBox("Ativo");
 
+        // Configuração dos botões de rádio para o gênero
         // Criando painel para os RadioButtons
         labelGen = new JLabel(" Gênero: ");
         panel4 = new JPanel(); // criação do painel
@@ -61,17 +68,19 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame
         panel4.add(radio1 = new JRadioButton("Feminino", false));
         panel4.add(radio2 = new JRadioButton("Masculino", true));
 
-        // Grupo de Radio Buttons
+        // Grupo de Radio Buttons- agrupa os botões
         radioGroup = new ButtonGroup();
         radioGroup.add(radio1);
         radioGroup.add(radio2);
 
+        // Botões de ação
         salvarButton = new JButton("Salvar"); // criação do botão salvar
         cancelarButton = new JButton("Cancelar"); // criação do outro botão
         panelButton = new JPanel(); // criação de um painel para botão
         panelButton.add(salvarButton); // adiciona cada botão no painel
         panelButton.add(cancelarButton);
 
+        // Painéis para organizar os labels e campos de entrada
         panel1 = new JPanel(); // criação de um painel
         panel1.add(labelNome);
         panel1.add(labelNick);
@@ -79,8 +88,9 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame
         panel1.add(labelTipo);
         panel1.add(labelStatus);
         panel1.add(labelGen);
-        panel1.setLayout(new GridLayout(6, 1));// 3 linhas e 1 coluna
+        panel1.setLayout(new GridLayout(6, 1));// 6 linhas e 1 coluna
 
+        // Painel
         panel2 = new JPanel();
         panel2.add(tFNome);
         panel2.add(tFNick);
@@ -102,30 +112,32 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame
         // Adicionando uma margem de 10 pixels nas bordas laterais e verticais
         panel0.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
+        // Define as ações dos botões
         salvarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validarCampos()) {
+                if (validarCampos()) {  // Verifica se todos os campos foram preenchidos corretamente
                     if (isEditMode) {
-                        atualizarUsuario();
+                        atualizarUsuario(); // Atualiza o usuário existente
                     } else {
-                        adicionarUsuario();
+                        adicionarUsuario(); // Cria um novo usuário
                     }
-                    dispose();
+                    dispose();  // Fecha o formulário
                 }
             }
         });
 
-        cancelarButton.addActionListener(e -> dispose());
+        cancelarButton.addActionListener(e -> dispose()); // Fecha o formulário ao clicar em "Cancelar"
 
         this.add(panel0);
-        this.pack();
+        this.pack(); // Ajusta o tamanho da janela aos componentes
         // this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // this.setResizable(false); // impede que o usuário ajuste o tamanho da janela
         this.setLocationRelativeTo(getParent());
 
     } // fim do construtor
 
+    // Preenche os campos com os dados do usuário em modo de edição
     private void preencherCampos() {
         if (usuario != null) {
             tFNome.setText(usuario.getNome());
@@ -150,6 +162,7 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame
         }
     }
 
+    // Valida se todos os campos obrigatórios foram preenchidos
     private boolean validarCampos() {
         if (tFNome.getText().trim().isEmpty() || tFNick.getText().trim().isEmpty() 
         || pFSenha.getPassword().toString().isEmpty() || String.valueOf(comboBox.getSelectedItem()).trim().isEmpty() 
@@ -164,6 +177,7 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame
         return true;
     }
 
+    // Cria um novo objeto de usuário com os dados preenchidos
     private void adicionarUsuario() {
         String genero = "";
         if (radio1.isSelected()) {
@@ -183,6 +197,7 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame
         );
     }
 
+    // Atualiza os dados do objeto de usuário
     private void atualizarUsuario( ) {
         if (usuario != null) {
             usuario.setNome(tFNome.getText().trim());
@@ -197,7 +212,7 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame
     }
 
     public Usuario getUsuario() {
-        return usuario;
+        return usuario; // Retorna o objeto (usuário)
     } 
 
-}// fim da classe
+}// Fim da classe

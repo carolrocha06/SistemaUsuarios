@@ -1,19 +1,20 @@
 // Modelo de dados que representa o Usuario
 package models;
 
-public class Usuario {
-    private String nick; 
-    private String nome;
-    private String senha;
-    private String tipo;
-    private String status;
-    private String genero;
+public class Usuario { // classe usuario com os atributos e comportamentos do modelo
+    private String nick; // primary key- identificador único
+    private String nome; // nome do usuário
+    private String senha; // senha do usuário
+    private String tipo; // tipo de usuário (administrador e comum)
+    private String status; // status do usuário (ativo e inativo)
+    private String genero;  // gênero do usuário (masculino e feminino)
 
     // Construtores
-    public Usuario() {
+    public Usuario() { // o padrão sem argumentos
     }
 
-    public Usuario(String nome, String senha, String tipo, String status, String genero) { // Sem nick 
+    // construtor que inicializa sem o atributo nick
+    public Usuario(String nome, String senha, String tipo, String status, String genero) { // Sem nickanem
         this.nome = nome;
         this.senha = senha;
         this.tipo = tipo;
@@ -21,6 +22,7 @@ public class Usuario {
         this.genero = genero;
     }
 
+    // construtor que inicializa um usuário com todos os atributos, incluindo nick
     public Usuario(String nome, String nick, String senha, String tipo, String status, String genero) { // Com nick 
         this.nome = nome;
         this.nick = nick;
@@ -30,15 +32,16 @@ public class Usuario {
         this.genero = genero;
     }
 
-    // Getters e Setters
+    // Getters e Setters (métodos para todos os atributos)
     public String getNick() {
         return nick; // Retorna o valor armazenado na variavel
     } 
 
     public void setNick(String nick) {
-        this.nick = nick;
+        this.nick = nick; // Define o valor do atributo nick
     }
 
+    // O mesmo ocorre aos outros nessas funções
     public String getNome() {
         return nome;
     }
@@ -79,7 +82,7 @@ public class Usuario {
         this.genero = genero;
     }
 
-    // toString
+    // toString-  // método que retorna uma representação textual do objeto
     @Override
     public String toString() {
         return "Usuário [nome=" + nome + ", nick=" + nick + ", senha=" + senha + ", tipo=" + tipo + ", status=" + status + ", genero=" + genero + "]";
