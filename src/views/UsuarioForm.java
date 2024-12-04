@@ -133,7 +133,7 @@ public class UsuarioForm extends JDialog { // ao invés de JFrame, extende JDial
         this.pack(); // Ajusta o tamanho da janela aos componentes
         // this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // this.setResizable(false); // impede que o usuário ajuste o tamanho da janela
-        this.setLocationRelativeTo(getParent());
+        this.setLocationRelativeTo(getParent()); // posiciona a janela no centro da tela
 
     } // fim do construtor
 
